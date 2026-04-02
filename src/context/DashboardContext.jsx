@@ -3,61 +3,107 @@ import React, { createContext, useState, useContext, useEffect } from "react";
 const DashboardContext = createContext();
 
 export const DashboardProvider = ({ children }) => {
-  // 1. Role State (Admin or Viewer)
   const [role, setRole] = useState("admin");
 
-  // 2. Mock Data (Initial State)
-  const [transactions, setTransactions] = useState([
-    {
-      id: 1,
-      date: "2026-03-01",
-      amount: 2500,
-      category: "Salary",
-      type: "income",
-    },
-    {
-      id: 2,
-      date: "2026-03-05",
-      amount: 150,
-      category: "Food",
-      type: "expense",
-    },
-    {
-      id: 3,
-      date: "2026-03-10",
-      amount: 500,
-      category: "Rent",
-      type: "expense",
-    },
-    {
-      id: 4,
-      date: "2026-03-15",
-      amount: 200,
-      category: "Shopping",
-      type: "expense",
-    },
-    {
-      id: 5,
-      date: "2026-03-20",
-      amount: 1200,
-      category: "Freelance",
-      type: "income",
-    },
-  ]);
+  const [transactions, setTransactions] = useState(() => {
+    const saved = localStorage.getItem("finance_transactions");
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        console.error("Failed to parse transactions from local storage", e);
+      }
+    }
+    return [
+      {
+        id: 1,
+        date: "2026-03-01",
+        amount: 2500,
+        category: "Salary",
+        type: "income",
+      },
+      {
+        id: 2,
+        date: "2026-03-05",
+        amount: 150,
+        category: "Food",
+        type: "expense",
+      },
+      {
+        id: 3,
+        date: "2026-03-10",
+        amount: 500,
+        category: "Rent",
+        type: "expense",
+      },
+      {
+        id: 4,
+        date: "2026-03-15",
+        amount: 200,
+        category: "Shopping",
+        type: "expense",
+      },
+      {
+        id: 5,
+        date: "2026-03-20",
+        amount: 1200,
+        category: "Freelance",
+        type: "income",
+      },
+    ];
+  });
 
-  // 3. Filter State
-  const [filterType, setFilterType] = useState("all"); // all, income, expense
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem("finance_theme") || "dark";
+  });
+
+  useEffect(() => {
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+    localStorage.setItem("finance_theme", theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
+  };
+
+  // local storage
+  useEffect(() => {
+    localStorage.setItem("finance_transactions", JSON.stringify(transactions));
+  }, [transactions]);
+
+  const [filterType, setFilterType] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
+  
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingTx, setEditingTx] = useState(null);
 
-  // Actions
   const addTransaction = (newTx) => {
-    if (role !== "admin") return; // RBAC Check
-    setTransactions([...transactions, { ...newTx, id: Date.now() }]);
+    if (role !== "admin") return;
+    setTransactions([{ ...newTx, id: Date.now() }, ...transactions]);
+  };
+
+  const editTransaction = (id, updatedTx) => {
+    if (role !== "admin") return;
+    setTransactions(transactions.map((tx) => (tx.id === id ? { ...tx, ...updatedTx } : tx)));
   };
 
   const deleteTransaction = (id) => {
-    if (role !== "admin") return; // RBAC Check
+    if (role !== "admin") return;
     setTransactions(transactions.filter((tx) => tx.id !== id));
+  };
+  
+  const openModal = (tx = null) => {
+      setEditingTx(tx);
+      setIsModalOpen(true);
+  };
+  
+  const closeModal = () => {
+      setEditingTx(null);
+      setIsModalOpen(false);
   };
 
   return (
@@ -72,7 +118,14 @@ export const DashboardProvider = ({ children }) => {
         searchTerm,
         setSearchTerm,
         addTransaction,
+        editTransaction,
         deleteTransaction,
+        isModalOpen,
+        openModal,
+        closeModal,
+        editingTx,
+        theme,
+        toggleTheme
       }}
     >
       {children}

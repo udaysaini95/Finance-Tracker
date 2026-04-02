@@ -1,111 +1,141 @@
-:root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+@import "tailwindcss";
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+@custom-variant dark (&:where(.dark, .dark *));
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+    --bg-page: #f8fafc;
+    --text-main: #0f172a;
+    --glass-bg: rgba(255, 255, 255, 0.85);
+    --glass-border: rgba(0, 0, 0, 0.1);
+    --bg-image: radial-gradient(ellipse at top, rgba(59, 130, 246, 0.05), transparent 60%),
+                radial-gradient(ellipse at bottom left, rgba(99, 102, 241, 0.05), transparent 50%);
   }
 
-  #social .button-icon {
-    filter: invert(1) brightness(2);
+  :root.dark {
+    --bg-page: #0b1120;
+    --text-main: #f8fafc;
+    --glass-bg: rgba(30, 41, 59, 0.6);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --bg-image: radial-gradient(ellipse at top, rgba(30, 58, 138, 0.15), transparent 60%),
+                radial-gradient(ellipse at bottom left, rgba(79, 70, 229, 0.1), transparent 50%);
+  }
+
+  body {
+    background-color: var(--bg-page);
+    background-image: var(--bg-image);
+    background-attachment: fixed;
+    color: var(--text-main);
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 }
 
-body {
-  margin: 0;
-}
-
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-}
-
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
-}
-
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
+@layer utilities {
+  .glass-panel {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s ease, border 0.3s ease, box-shadow 0.3s ease;
   }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
+  
+  .text-gradient {
+    background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
-}
-p {
-  margin: 0;
-}
+  
+  @keyframes fade-in-up {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
 
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
-}
+  .animate-fade-in-up {
+    animation: fade-in-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  
+  .delay-100 { animation-delay: 100ms; }
+  .delay-200 { animation-delay: 200ms; }
+  .delay-300 { animation-delay: 300ms; }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+  @keyframes dropdown-enter {
+    0% { opacity: 0; transform: scale(0.95) translateY(-5px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  .animate-dropdown {
+    animation: dropdown-enter 0.15s ease-out forwards;
+    transform-origin: top;
+  }
+
+  @keyframes coin-flip {
+    0% { transform: translateY(0) rotateY(0deg) scale(1); }
+    25% { transform: translateY(-30px) rotateY(180deg) scale(1.2); }
+    50% { transform: translateY(0) rotateY(360deg) scale(1); }
+    75% { transform: translateY(-15px) rotateY(540deg) scale(1.1); }
+    100% { transform: translateY(0) rotateY(720deg) scale(1); }
+  }
+
+  .animate-coin-flip {
+    animation: coin-flip 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) infinite;
+  }
+
+  @keyframes float-up {
+    0% { transform: translateY(10px) translateX(-50%); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: translateY(-50px) translateX(-50%) rotate(15deg); opacity: 0; }
+  }
+
+  .animate-float-money {
+    animation: float-up 1.2s ease-in infinite;
+  }
+
+  @keyframes modal-backdrop-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes modal-card-in {
+    from { 
+      opacity: 0; 
+      transform: scale(0.94) translateY(12px);
+    }
+    to { 
+      opacity: 1; 
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  @keyframes modal-field-in {
+    from { opacity: 0; transform: translateX(-8px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  @keyframes text-fade-up {
+    0%   { opacity: 0; transform: translateY(8px) scale(0.97); filter: blur(4px); }
+    40%  { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+    75%  { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+    100% { opacity: 0; transform: translateY(-6px) scale(0.98); filter: blur(2px); }
+  }
+
+  .animate-text-reveal {
+    animation: text-fade-up 0.85s ease-in-out forwards;
+  }
+
+  .animate-modal-backdrop {
+    animation: modal-backdrop-in 0.2s ease-out forwards;
+  }
+
+  .animate-modal-enter {
+    animation: modal-card-in 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+
+  .animate-modal-field {
+    opacity: 0;
+    animation: modal-field-in 0.25s ease-out forwards;
+  }
 }
