@@ -18,7 +18,7 @@ export const DashboardProvider = ({ children }) => {
       {
         id: 1,
         date: "2026-03-01",
-        amount: 2500,
+        amount: 30000,
         category: "Salary",
         type: "income",
       },
@@ -32,21 +32,21 @@ export const DashboardProvider = ({ children }) => {
       {
         id: 3,
         date: "2026-03-10",
-        amount: 500,
+        amount: 5000,
         category: "Rent",
         type: "expense",
       },
       {
         id: 4,
         date: "2026-03-15",
-        amount: 200,
+        amount: 2000,
         category: "Shopping",
         type: "expense",
       },
       {
         id: 5,
         date: "2026-03-20",
-        amount: 1200,
+        amount: 4200,
         category: "Freelance",
         type: "income",
       },

@@ -137,26 +137,35 @@ const AppContent = () => {
                 </button>
               </div>
 
-              <div className="h-9 flex bg-slate-200 dark:bg-slate-800/60 p-0.5 rounded-xl border border-slate-300 dark:border-slate-700/50 relative overflow-hidden shrink-0">
-                <div 
-                  className={`absolute top-0.5 bottom-0.5 w-1/2 bg-white dark:bg-blue-600/20 rounded-lg transition-all duration-300 ease-in-out shadow-sm dark:shadow-none ${role === "admin" ? "translate-x-full" : "translate-x-0"}`}
-                ></div>
-                <button
-                  onClick={() => setRole("viewer")}
-                  className={`relative flex items-center justify-center gap-1 px-2.5 sm:w-20 rounded-lg text-xs sm:text-sm font-medium transition-all z-10 ${
-                    role === "viewer" ? "text-slate-900 dark:text-blue-400" : "text-slate-500 dark:text-slate-400"
-                  }`}
-                >
-                  <User size={13} /> <span className="hidden sm:inline">Viewer</span>
-                </button>
-                <button
-                  onClick={() => setRole("admin")}
-                  className={`relative flex items-center justify-center gap-1 px-2.5 sm:w-20 rounded-lg text-xs sm:text-sm font-medium transition-all z-10 ${
-                    role === "admin" ? "text-slate-900 dark:text-blue-400" : "text-slate-500 dark:text-slate-400"
-                  }`}
-                >
-                  <Shield size={13} /> <span className="hidden sm:inline">Admin</span>
-                </button>
+              <div className="h-9 bg-slate-200 dark:bg-slate-800 p-0.5 rounded-xl border border-slate-300 dark:border-slate-700 shrink-0 flex">
+                <div className="relative flex w-full h-full text-slate-500">
+                  {/* Sliding Background */}
+                  <div 
+                    className={`absolute top-0 bottom-0 w-1/2 rounded-lg transition-transform duration-300 ease-in-out shadow-sm bg-white dark:bg-blue-600 ${role === "admin" ? "translate-x-full" : "translate-x-0"}`}
+                  ></div>
+                  
+                  <button
+                    onClick={() => setRole("viewer")}
+                    className={`relative flex-1 flex items-center justify-center gap-1 px-3 sm:w-20 text-xs sm:text-sm font-medium transition-all duration-200 z-10 ${
+                      role === "viewer" 
+                        ? "text-slate-900 dark:text-white" 
+                        : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
+                    }`}
+                  >
+                    <User size={15} /> <span className="hidden sm:inline">Viewer</span>
+                  </button>
+                  
+                  <button
+                    onClick={() => setRole("admin")}
+                    className={`relative flex-1 flex items-center justify-center gap-1 px-3 sm:w-20 text-xs sm:text-sm font-medium transition-all duration-200 z-10 ${
+                      role === "admin" 
+                        ? "text-slate-900 dark:text-white" 
+                        : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
+                    }`}
+                  >
+                    <Shield size={15} /> <span className="hidden sm:inline">Admin</span>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
